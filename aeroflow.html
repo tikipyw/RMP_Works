@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aeroflow — магазин вентиляторов</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F3F6F4;
+    --surface:#FFFFFF;
+    --ink:#16231F;
+    --ink-soft:#4A5C56;
+    --teal:#2B6F63;
+    --teal-dark:#1D4E45;
+    --orange:#E2762B;
+    --line:#D7E0DB;
+    --radius-s:4px;
+    --radius-m:10px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3, .display{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+  .wrap{
+    max-width:1160px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  button{font-family:inherit; cursor:pointer;}
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(243,246,244,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 0;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-size:20px; font-weight:700;
+  }
+  .logo svg{width:26px; height:26px;}
+  .nav-links{
+    display:flex; gap:28px; font-size:15px; color:var(--ink-soft);
+  }
+  .nav-links a{ text-decoration:none; }
+  .nav-links a:hover{ color:var(--teal-dark); }
+  .cart-btn{
+    display:flex; align-items:center; gap:8px;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    border-radius:var(--radius-s);
+    padding:10px 16px;
+    font-size:14px;
+    font-weight:500;
+  }
+  .cart-count{
+    background:var(--orange);
+    color:#fff;
+    border-radius:50%;
+    width:20px; height:20px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:72px 0 88px;
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:40px;
+    align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(34px, 4.5vw, 54px);
+    line-height:1.05;
+    max-width:11ch;
+  }
+  .hero p{
+    margin-top:20px;
+    max-width:44ch;
+    color:var(--ink-soft);
+    font-size:17px;
+  }
+  .hero-cta{
+    margin-top:32px;
+    display:flex; gap:14px; flex-wrap:wrap;
+  }
+  .btn-primary{
+    background:var(--teal);
+    color:#fff;
+    border:none;
+    padding:14px 24px;
+    border-radius:var(--radius-s);
+    font-size:15px;
+    font-weight:500;
+  }
+  .btn-primary:hover{ background:var(--teal-dark); }
+  .btn-ghost{
+    background:transparent;
+    border:1px solid var(--line);
+    padding:14px 24px;
+    border-radius:var(--radius-s);
+    font-size:15px;
+    color:var(--ink);
+  }
+  .btn-ghost:hover{ border-color:var(--ink); }
+
+  .hero-fan{
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+  }
+  .fan-rig{
+    width:100%;
+    max-width:320px;
+  }
+  .fan-blades{
+    transform-origin:160px 160px;
+    animation:spin 2.4s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .fan-blades{ animation:none; }
+  }
+  @keyframes spin{
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(360deg); }
+  }
+
+  .hero-stats{
+    margin-top:36px;
+    display:flex; gap:32px;
+  }
+  .hero-stats div{ font-size:13px; color:var(--ink-soft); }
+  .hero-stats strong{
+    display:block;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:22px;
+    color:var(--ink);
+  }
+
+  /* ---------- Trust strip ---------- */
+  .trust{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:28px 0;
+  }
+  .trust .wrap{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:24px;
+  }
+  .trust-item{
+    display:flex; gap:12px; align-items:flex-start;
+  }
+  .trust-item svg{ flex-shrink:0; width:22px; height:22px; color:var(--teal); margin-top:2px;}
+  .trust-item h3{ font-size:15px; font-weight:600; }
+  .trust-item p{ font-size:13.5px; color:var(--ink-soft); margin-top:2px; }
+
+  /* ---------- Catalog ---------- */
+  .catalog{ padding:64px 0 40px; }
+  .catalog-head{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    flex-wrap:wrap; gap:16px;
+    margin-bottom:28px;
+  }
+  .catalog-head h2{ font-size:28px; }
+  .catalog-head p{ color:var(--ink-soft); font-size:14px; margin-top:6px; }
+
+  .filters{
+    display:flex; gap:8px; flex-wrap:wrap;
+  }
+  .filter-btn{
+    background:var(--surface);
+    border:1px solid var(--line);
+    padding:8px 16px;
+    border-radius:20px;
+    font-size:13.5px;
+    color:var(--ink-soft);
+  }
+  .filter-btn.active{
+    background:var(--ink);
+    color:#fff;
+    border-color:var(--ink);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .card{
+    background:var(--surface);
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+  }
+  .card-media{
+    aspect-ratio:1/1;
+    background:var(--bg);
+    border-radius:var(--radius-s);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:16px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card-media svg{ width:56%; }
+  .card-media .mini-blades{
+    transform-origin:center;
+    animation:spin 3s linear infinite;
+  }
+  .card-tag{
+    position:absolute; top:10px; left:10px;
+    font-size:11px;
+    background:var(--orange);
+    color:#fff;
+    padding:3px 8px;
+    border-radius:12px;
+  }
+  .card h3{ font-size:16px; margin-bottom:4px; }
+  .card .spec{ font-size:12.5px; color:var(--ink-soft); margin-bottom:14px; }
+  .card-foot{
+    margin-top:auto;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .price{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:18px;
+  }
+  .add-btn{
+    background:var(--surface);
+    border:1px solid var(--ink);
+    color:var(--ink);
+    padding:8px 14px;
+    border-radius:var(--radius-s);
+    font-size:13px;
+    font-weight:500;
+  }
+  .add-btn:hover{ background:var(--ink); color:#fff; }
+  .add-btn.added{ background:var(--teal); border-color:var(--teal); color:#fff; }
+
+  /* ---------- Footer ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:40px 0;
+    margin-top:60px;
+  }
+  .foot-wrap{
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px;
+    font-size:13.5px; color:var(--ink-soft);
+  }
+  .foot-wrap .logo{ color:var(--ink); }
+
+  /* ---------- Cart drawer ---------- */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(22,35,31,0.35);
+    opacity:0; pointer-events:none;
+    transition:opacity .25s ease;
+    z-index:90;
+  }
+  .overlay.open{ opacity:1; pointer-events:auto; }
+
+  .drawer{
+    position:fixed; top:0; right:0; bottom:0;
+    width:380px; max-width:92vw;
+    background:var(--surface);
+    box-shadow:-8px 0 24px rgba(0,0,0,0.08);
+    transform:translateX(100%);
+    transition:transform .3s ease;
+    z-index:100;
+    display:flex; flex-direction:column;
+  }
+  .drawer.open{ transform:translateX(0); }
+  .drawer-head{
+    padding:20px 22px;
+    border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .drawer-head h3{ font-size:18px; }
+  .close-btn{
+    background:none; border:none; font-size:20px; line-height:1;
+    color:var(--ink-soft);
+  }
+  .drawer-body{
+    flex:1;
+    overflow-y:auto;
+    padding:16px 22px;
+  }
+  .empty-cart{
+    color:var(--ink-soft);
+    font-size:14px;
+    text-align:center;
+    padding:60px 10px;
+  }
+  .line-item{
+    display:flex; gap:12px;
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .line-item .thumb{
+    width:56px; height:56px;
+    background:var(--bg);
+    border-radius:var(--radius-s);
+    flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .line-item .thumb svg{ width:32px; }
+  .line-info{ flex:1; }
+  .line-info h4{ font-size:14px; font-weight:500; }
+  .line-info .price{ font-size:13.5px; margin-top:2px; }
+  .qty-row{
+    display:flex; align-items:center; gap:10px;
+    margin-top:8px;
+  }
+  .qty-row button{
+    width:24px; height:24px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    border-radius:4px;
+    font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .remove-link{
+    font-size:12px; color:var(--ink-soft);
+    text-decoration:underline;
+    margin-left:auto;
+    background:none; border:none;
+  }
+  .drawer-foot{
+    padding:20px 22px;
+    border-top:1px solid var(--line);
+  }
+  .total-row{
+    display:flex; justify-content:space-between;
+    font-size:15px; margin-bottom:14px;
+  }
+  .total-row strong{ font-family:'Space Grotesk', sans-serif; font-size:20px; }
+  .checkout-btn{
+    width:100%;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    padding:14px;
+    border-radius:var(--radius-s);
+    font-size:15px;
+    font-weight:500;
+  }
+  .checkout-btn:hover{ background:var(--teal-dark); }
+  .confirm-note{
+    font-size:12.5px; color:var(--teal-dark);
+    margin-top:10px; text-align:center;
+    display:none;
+  }
+  .confirm-note.show{ display:block; }
+
+  @media (max-width: 880px){
+    .hero{ grid-template-columns:1fr; }
+    .hero-fan{ order:-1; max-width:220px; margin:0 auto; }
+    .trust .wrap{ grid-template-columns:1fr; }
+    .grid{ grid-template-columns:repeat(2, 1fr); }
+    .nav-links{ display:none; }
+  }
+  @media (max-width: 480px){
+    .grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">
+      <svg viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="19" stroke="#2B6F63" stroke-width="2"/>
+        <path d="M20 20 C20 12 26 10 28 14 C30 18 24 20 20 20" fill="#2B6F63"/>
+        <path d="M20 20 C28 20 30 26 26 28 C22 30 20 24 20 20" fill="#E2762B"/>
+        <path d="M20 20 C20 28 14 30 12 26 C10 22 16 20 20 20" fill="#2B6F63"/>
+        <circle cx="20" cy="20" r="3" fill="#16231F"/>
+      </svg>
+      Aeroflow
+    </div>
+    <nav class="nav-links">
+      <a href="#catalog">Каталог</a>
+      <a href="#trust">Доставка и гарантия</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <button class="cart-btn" onclick="openCart()">
+      Корзина
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap" style="display:contents;">
+    <div>
+      <h1>Воздух в доме, которым приятно дышать</h1>
+      <p>Настольные, напольные, потолочные и промышленные вентиляторы — тихие, мощные и подобранные под площадь вашего помещения.</p>
+      <div class="hero-cta">
+        <a href="#catalog" class="btn-primary" style="text-decoration:none; display:inline-block;">Смотреть каталог</a>
+        <a href="#trust" class="btn-ghost" style="text-decoration:none; display:inline-block;">Как выбрать модель</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>32</strong>модели в наличии</div>
+        <div><strong>2 года</strong>гарантии на мотор</div>
+        <div><strong>24 ч</strong>доставка по городу</div>
+      </div>
+    </div>
+    <div class="hero-fan">
+      <svg class="fan-rig" viewBox="0 0 320 320">
+        <circle cx="160" cy="160" r="150" fill="#FFFFFF" stroke="#D7E0DB" stroke-width="2"/>
+        <circle cx="160" cy="160" r="118" fill="none" stroke="#D7E0DB" stroke-width="2"/>
+        <g class="fan-blades">
+          <path d="M160 160 C160 110 200 95 215 120 C230 145 190 160 160 160" fill="#2B6F63"/>
+          <path d="M160 160 C210 160 225 200 200 215 C175 230 160 190 160 160" fill="#E2762B"/>
+          <path d="M160 160 C160 210 120 225 105 200 C90 175 130 160 160 160" fill="#2B6F63"/>
+          <path d="M160 160 C110 160 95 120 120 105 C145 90 160 130 160 160" fill="#E2762B"/>
+        </g>
+        <circle cx="160" cy="160" r="16" fill="#16231F"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="trust" id="trust">
+  <div class="wrap">
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12l7-9v6h11l-7 9v-6H3z"/></svg>
+      <div>
+        <h3>Доставка за 24 часа</h3>
+        <p>По Троицку — на следующий день, по стране — 2–3 рабочих дня.</p>
+      </div>
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>
+      <div>
+        <h3>Гарантия 2 года</h3>
+        <p>Бесплатная замена мотора и лопастей при заводском браке.</p>
+      </div>
+    </div>
+    <div class="trust-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      <div>
+        <h3>Подбор по площади</h3>
+        <p>Поможем рассчитать мощность под размер вашей комнаты.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="catalog" id="catalog">
+  <div class="wrap">
+    <div class="catalog-head">
+      <div>
+        <h2>Каталог вентиляторов</h2>
+        <p id="resultsCount">Показано 8 моделей</p>
+      </div>
+      <div class="filters" id="filters">
+        <button class="filter-btn active" data-cat="all">Все</button>
+        <button class="filter-btn" data-cat="desk">Настольные</button>
+        <button class="filter-btn" data-cat="floor">Напольные</button>
+        <button class="filter-btn" data-cat="ceiling">Потолочные</button>
+        <button class="filter-btn" data-cat="industrial">Промышленные</button>
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<footer id="contacts">
+  <div class="wrap foot-wrap">
+    <div>
+      <div class="logo">Aeroflow</div>
+      <p style="margin-top:8px;">г. Троицк, ул. Чапаева, 20<br>пн–сб 10:00–19:00</p>
+    </div>
+    <div>
+      <p>+7 495 123-45-67</p>
+      <p>hello@aeroflow.ru</p>
+    </div>
+    <div>
+      <p>© 2026 Aeroflow</p>
+      <p>Все модели сертифицированы CE</p>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <h3>Корзина</h3>
+    <button class="close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot">
+    <div class="total-row">
+      <span>Итого</span>
+      <strong id="totalPrice">0 ₽</strong>
+    </div>
+    <button class="checkout-btn" onclick="checkout()">Оформить заказ</button>
+    <p class="confirm-note" id="confirmNote">Спасибо! Мы свяжемся с вами для подтверждения заказа.</p>
+  </div>
+</aside>
+
+<script>
+  const products = [
+    { id:1, name:'Настольный Aria 20', cat:'desk', catLabel:'Настольный', spec:'20 см · 3 скорости · 18 Вт', price:2490, tag:null, color1:'#2B6F63', color2:'#E2762B' },
+    { id:2, name:'Напольный Column X90', cat:'floor', catLabel:'Напольный', spec:'90 см · пульт ДУ · таймер', price:5990, tag:null, color1:'#2B6F63', color2:'#E2762B' },
+    { id:3, name:'Потолочный Loft 132', cat:'ceiling', catLabel:'Потолочный', spec:'132 см · 6 лопастей · реверс', price:12900, tag:'Хит', color1:'#2B6F63', color2:'#E2762B' },
+    { id:4, name:'Промышленный PowerFlow 750', cat:'industrial', catLabel:'Промышленный', spec:'75 см · 750 Вт · IP44', price:34900, tag:null, color1:'#2B6F63', color2:'#E2762B' },
+    { id:5, name:'Mist Breeze с увлажнением', cat:'floor', catLabel:'Напольный', spec:'бак 4 л · холодный пар', price:7990, tag:'Новинка', color1:'#2B6F63', color2:'#E2762B' },
+    { id:6, name:'NightAir Slim бесшумный', cat:'desk', catLabel:'Настольный', spec:'< 28 дБ · USB-питание', price:4490, tag:null, color1:'#2B6F63', color2:'#E2762B' },
+    { id:7, name:'Tower Pulse башенный', cat:'floor', catLabel:'Напольный', spec:'106 см · ионизация', price:6990, tag:null, color1:'#2B6F63', color2:'#E2762B' },
+    { id:8, name:'Потолочный Nordic 122 DC', cat:'ceiling', catLabel:'Потолочный', spec:'DC-мотор · 6 скоростей', price:13900, tag:null, color1:'#2B6F63', color2:'#E2762B' },
+  ];
+
+  function formatPrice(value){
+    return value.toLocaleString('ru-RU') + ' ₽';
+  }
+
+  let activeCat = 'all';
+  const cart = {}; // id -> qty
+
+  function fanSvg(c1, c2){
+    return `<svg viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="#D7E0DB" stroke-width="2"/>
+      <g class="mini-blades">
+        <path d="M60 60 C60 35 78 28 84 40 C90 52 70 60 60 60" fill="${c1}"/>
+        <path d="M60 60 C85 60 92 78 80 84 C68 90 60 70 60 60" fill="${c2}"/>
+        <path d="M60 60 C60 85 42 92 36 80 C30 68 50 60 60 60" fill="${c1}"/>
+        <path d="M60 60 C35 60 28 42 40 36 C52 30 60 50 60 60" fill="${c2}"/>
+      </g>
+      <circle cx="60" cy="60" r="7" fill="#16231F"/>
+    </svg>`;
+  }
+
+  function renderGrid(){
+    const grid = document.getElementById('grid');
+    const list = products.filter(p => activeCat === 'all' || p.cat === activeCat);
+    document.getElementById('resultsCount').textContent = `Показано ${list.length} ${list.length === 1 ? 'модель' : 'моделей'}`;
+    grid.innerHTML = list.map(p => `
+      <div class="card">
+        <div class="card-media">
+          ${p.tag ? `<span class="card-tag">${p.tag}</span>` : ''}
+          ${fanSvg(p.color1, p.color2)}
+        </div>
+        <h3>${p.name}</h3>
+        <p class="spec">${p.catLabel} · ${p.spec}</p>
+        <div class="card-foot">
+          <span class="price">${formatPrice(p.price)}</span>
+          <button class="add-btn" id="add-${p.id}" onclick="addToCart(${p.id})">В корзину</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('filters').addEventListener('click', (e) => {
+    const btn = e.target.closest('.filter-btn');
+    if(!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    renderGrid();
+  });
+
+  function addToCart(id){
+    cart[id] = (cart[id] || 0) + 1;
+    const btn = document.getElementById(`add-${id}`);
+    btn.textContent = 'Добавлено';
+    btn.classList.add('added');
+    setTimeout(() => {
+      btn.textContent = 'В корзину';
+      btn.classList.remove('added');
+    }, 900);
+    updateCartUI();
+  }
+
+  function changeQty(id, delta){
+    if(!cart[id]) return;
+    cart[id] += delta;
+    if(cart[id] <= 0) delete cart[id];
+    updateCartUI();
+  }
+
+  function removeItem(id){
+    delete cart[id];
+    updateCartUI();
+  }
+
+  function updateCartUI(){
+    const ids = Object.keys(cart);
+    const count = ids.reduce((sum, id) => sum + cart[id], 0);
+    document.getElementById('cartCount').textContent = count;
+
+    const body = document.getElementById('drawerBody');
+    if(ids.length === 0){
+      body.innerHTML = '<p class="empty-cart">Корзина пуста.<br>Выберите модель в каталоге.</p>';
+    } else {
+      body.innerHTML = ids.map(id => {
+        const p = products.find(x => x.id == id);
+        return `
+          <div class="line-item">
+            <div class="thumb">${fanSvg(p.color1, p.color2)}</div>
+            <div class="line-info">
+              <h4>${p.name}</h4>
+              <div class="price">${formatPrice(p.price)}</div>
+              <div class="qty-row">
+                <button onclick="changeQty(${p.id}, -1)">−</button>
+                <span>${cart[id]}</span>
+                <button onclick="changeQty(${p.id}, 1)">+</button>
+                <button class="remove-link" onclick="removeItem(${p.id})">Удалить</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    const total = ids.reduce((sum, id) => sum + cart[id] * products.find(x => x.id == id).price, 0);
+    document.getElementById('totalPrice').textContent = formatPrice(total);
+    document.getElementById('confirmNote').classList.remove('show');
+  }
+
+  function openCart(){
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('overlay').classList.add('open');
+  }
+  function closeCart(){
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+  }
+  function checkout(){
+    if(Object.keys(cart).length === 0) return;
+    document.getElementById('confirmNote').classList.add('show');
+  }
+
+  renderGrid();
+  updateCartUI();
+</script>
+
+</body>
+</html>
